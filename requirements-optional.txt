@@ -1,0 +1,3 @@
+yara-python
+py7zr
+rarfile

@@ -1,0 +1,28 @@
+{
+  "incoming_dir": "",
+  "processing_dir": "",
+  "clean_dir": "",
+  "quarantine_dir": "",
+  "error_dir": "",
+  "recursive": true,
+  "poll_seconds": 2.0,
+  "stable_seconds": 10.0,
+  "reconcile_seconds": 60.0,
+  "ignore_extensions": [
+    ".part",
+    ".part.met",
+    ".tmp",
+    ".temp",
+    ".crdownload",
+    ".download"
+  ],
+  "suspicious_score": 45,
+  "review_action": "quarantine",
+  "max_archive_depth": 4,
+  "max_archive_entries": 5000,
+  "max_uncompressed_bytes": 2147483648,
+  "max_member_bytes": 536870912,
+  "max_expansion_ratio": 250.0,
+  "yara_timeout_seconds": 15,
+  "scan_timeout_seconds": 600
+}
