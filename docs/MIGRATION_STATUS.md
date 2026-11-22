@@ -26,10 +26,19 @@ Fecha de la comprobación: **2026-11-22**.
 - [x] Localizar el repositorio y confirmar permisos de escritura.
 - [x] Comprobar integridad del ZIP v0.3.0 y su batería de tests.
 - [x] Definir exclusiones de seguridad del repositorio.
-- [ ] Importar íntegramente código fuente/configuración/tests/scripts de v0.3.0.
+- [ ] Importar íntegramente código fuente/configuración/tests/scripts de v0.3.0. **Avance: 25/46 archivos de origen subidos y verificados por SHA de objeto Git**.
 - [ ] Importar el Documento Maestro vigente v1.4 y los documentos históricos.
 - [ ] Añadir y verificar GitHub Actions Linux/Windows.
 - [ ] Publicar el tag de baseline, una vez verificada equivalencia del árbol importado.
 - [ ] Revisar la diferencia completa entre el ZIP de origen y GitHub.
+
+### Punto de control: 2026-11-22
+
+- Bloque A: 9/9 archivos originales (modelos, política, tipos, YARA, reglas y configuración) comprobados contra GitHub.
+- Bloque B: 16/16 archivos originales (CLI auxiliar, scripts Windows, reportes) comprobados contra GitHub.
+- Total: **25/46 archivos originales idénticos**. Pendientes: 21 archivos, entre ellos scanner, pipeline, almacenamiento de estado, tests y documentación de release.
+- La equivalencia se ha verificado comparando el SHA de objeto Git del archivo original con el SHA del blob recuperado de GitHub.
+- No se han ejecutado tests de `main` porque la importación todavía es parcial; los 16/16 PASS corresponden al ZIP completo original.
+- Commits de importación: `37e0da7c0a380eeec79d99e91fa8c5a0a8168e4d` y `b56baebfca4748d10e7b027395ab2ba247a24aa3`.
 
 **Regla:** la rama `main` no debe tratarse como baseline funcional importada hasta cerrar esta lista.
