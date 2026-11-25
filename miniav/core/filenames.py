@@ -64,13 +64,13 @@ def inspect_filename(filename: str) -> FilenameInspection:
     active = len(tokens) > 1 and tokens[-1] in _ACTIVE
     decoy = len(tokens) > 2 and tokens[-2] in _DECOY
     # Empty or intervening suffix tokens can hide the document extension.
-    intervening_decoy = (
-        active and not decoy and
-        any(part in _DECOY for part in tokens[max(0, len(tokens) - 5):-1])
+    decoy_before_suffix = any(
+        part in _DECOY for part in tokens[max(0, len(tokens) - 5):-1]
     )
+    intervening_decoy = active and not decoy and decoy_before_suffix
     mixed_unicode_suffix = (
         len(tokens) > 2 and not active and
-        any(part in _DECOY for part in tokens[max(0, len(tokens) - 5):-1]) and
+        decoy_before_suffix and
         any(ord(ch) > 127 for ch in pieces[-1]) and
         any("a" <= ch <= "z" or "0" <= ch <= "9" for ch in pieces[-1])
     )
@@ -101,9 +101,10 @@ def inspect_filename(filename: str) -> FilenameInspection:
                "Extensión no reconocida con letras mezcladas tras un tipo documental",
                block=False)
     if has_control:
-        report("FILENAME_UNSAFE_CONTROL", 75 if active or intervening_decoy or mixed_unicode_suffix else 20,
+        control_risk = bool(active or decoy_before_suffix)
+        report("FILENAME_UNSAFE_CONTROL", 75 if control_risk else 20,
                "Carácter de control en nombre que puede confundir al usuario",
-               block=bool(active or intervening_decoy or mixed_unicode_suffix))
+               block=control_risk)
     if has_bidi:
         report("FILENAME_BIDI_CONTROL", 75,
                "Controles bidireccionales capaces de alterar el orden visual",
