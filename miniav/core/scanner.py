@@ -14,6 +14,7 @@ from pathlib import Path
 from miniav import __version__, POLICY_VERSION
 from .archives import inspect_zip
 from .pe import PEFormatError, inspect_pe
+from .scripts import ScriptInspectionError, inspect_script
 from .filetypes import ACTIVE_EXTENSIONS, DECOY_EXTENSIONS, EXECUTABLE_EXTENSIONS, SCRIPT_EXTENSIONS, detect_type
 from .models import Finding, ScanResult
 from .policy import verdict
@@ -50,7 +51,9 @@ def scan_file(path: Path | str, config: dict | None = None,
     detected = "Unknown/binary"
     yara_matches: list[str] = []
     pe_details = None
+    script_details = None
     trusted_pe = False
+    trusted_script = False
     complete = True
     start = time.monotonic()
     yara_ok, yara_reason = yara_capability()
@@ -135,22 +138,51 @@ def scan_file(path: Path | str, config: dict | None = None,
                 errors.append(f"PE malformado: {exc}")
         elif suffix in EXECUTABLE_EXTENSIONS:
             errors.append("Extensión ejecutable sin formato PE reconocido")
-        if is_active and detected != "PE/Windows executable":
+        if suffix in SCRIPT_EXTENSIONS and detected != "PE/Windows executable":
+            allowed_script = cfg.get("trusted_script_sha256", [])
+            if not isinstance(allowed_script, list) or any(
+                not isinstance(value, str) or len(value) != 64 or
+                any(ch not in "0123456789abcdefABCDEF" for ch in value)
+                for value in allowed_script
+            ):
+                raise ValueError("trusted_script_sha256 debe contener hashes SHA-256")
+            try:
+                script_limit = int(cfg.get("max_script_bytes", 1048576))
+                if not 1 <= script_limit <= 16777216:
+                    raise ValueError("max_script_bytes fuera de límites")
+                if size > script_limit:
+                    raise ScriptInspectionError("El script excede el límite inspeccionable")
+                script_info = inspect_script(p.read_bytes(), max_size=script_limit)
+                trusted_script = sha256.hexdigest() in {v.lower() for v in allowed_script}
+                script_details = {"encoding": script_info.encoding,
+                                  "inspected_bytes": size,
+                                  "trusted_sha256": trusted_script}
+                findings.extend(script_info.findings)
+                if not trusted_script:
+                    findings.append(Finding(
+                        "SCRIPT_REVIEW_REQUIRED", "info", 20,
+                        "Script desconocido: revisión sin afirmar malware",
+                        "scripts"))
+            except ScriptInspectionError as exc:
+                errors.append(f"Script no inspeccionable: {exc}")
+        elif is_active and detected != "PE/Windows executable":
             findings.append(Finding("ACTIVE_FILE", "medium", 50,
                                     "Tipo activo: revisión antes de liberar", "filetypes"))
         if detected in {"PE/Windows executable", "ELF executable/object", "Mach-O executable/object"}:
-            if not is_active:
+            if (detected == "PE/Windows executable" and suffix not in EXECUTABLE_EXTENSIONS) or not is_active:
                 findings.append(Finding("MISMATCH_EXECUTABLE", "high", 85,
                                         "Ejecutable con extensión inesperada", "filetypes",
                                         p.name, True))
             if _entropy(raw) > 7.4:
                 findings.append(Finding("HIGH_ENTROPY_EXECUTABLE", "medium", 20,
                                         "Entropía elevada en ejecutable", "heuristics"))
-        if suffix in SCRIPT_EXTENSIONS or detected == "Text/script-like file":
+        if detected == "Text/script-like file" and suffix not in SCRIPT_EXTENSIONS:
+            # For non-script extensions, preserve a low-cost indicator only.
             small = raw.lower()
             if b"-encodedcommand" in small or b"powershell -enc" in small:
                 findings.append(Finding("ENCODED_POWERSHELL", "high", 75,
-                                        "Indicador de PowerShell ofuscado", "heuristics", blocking=True))
+                                        "Indicador textual PowerShell codificado",
+                                        "heuristics", blocking=True))
         if detected == "ZIP container" or suffix == ".zip":
             more, nested, archive_errors = inspect_zip(
                 p, max_depth=int(cfg.get("max_archive_depth", 4)),
@@ -196,6 +228,7 @@ def scan_file(path: Path | str, config: dict | None = None,
             "zip": True, "rar": False, "7z": False, "deep_pe": False,
             "ml": False, "reconstructed": True,
             "pe": pe_details, "trusted_sha256": trusted_pe,
+            "script": script_details, "trusted_script_sha256": trusted_script,
         }, engine_version=__version__, policy_version=POLICY_VERSION,
         rules_version=rules_ver, scanned_at=now,
         error="; ".join(errors) if errors else None)

@@ -27,3 +27,20 @@ Antes de ampliar la liberación automática harán falta corpus benignos,
 muestras maliciosas controladas y validación real en Windows.
 
 Documento Maestro v1.4: sigue pendiente de recuperación/importación.
+
+## Scripts (primera cobertura estructurada)
+
+El analizador de scripts inspecciona contenido (UTF-8, Windows-1252 y
+UTF-16 LE/BE) sin ejecutar comandos. Comprueba indicadores como PowerShell
+codificado, descarga combinada con ejecución y mecanismos de persistencia.
+El tamaño inspeccionado está limitado por max_script_bytes (por defecto 1 MiB);
+si el contenido no es inspeccionable, ERROR.
+
+El propietario puede autorizar **una versión exacta** de un script verificado
+mediante trusted_script_sha256 en la configuración. Los hallazgos y errores
+tienen prioridad sobre esta autorización. Los scripts desconocidos continúan
+retenidos para revisión, sin afirmarse que contienen malware.
+
+No existe aún comprobación completa de código dinámico, ofuscación arbitraria,
+firmas criptográficas ni garantía de detección de scripts maliciosos desconocidos.
+Las pruebas son sintéticas y no sustituyen el benchmark con corpus de referencia.

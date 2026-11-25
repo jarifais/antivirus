@@ -16,6 +16,8 @@ DEFAULT_CONFIG = {
     "max_expansion_ratio": 250.0, "yara_timeout_seconds": 15,
     "scan_timeout_seconds": 600,
     "trusted_executable_sha256": [],
+    "trusted_script_sha256": [],
+    "max_script_bytes": 1048576,
 }
 
 def load_config(path: Path) -> dict:
@@ -93,6 +95,15 @@ def validate_config(cfg: dict, *, create_outputs: bool = False) -> dict[str, Pat
         for value in allowed
     ):
         raise ValueError("trusted_executable_sha256 debe contener hashes SHA-256")
+    script_hashes = cfg.get("trusted_script_sha256", [])
+    if not isinstance(script_hashes, list) or any(
+        not isinstance(value, str) or len(value) != 64 or
+        any(ch not in "0123456789abcdefABCDEF" for ch in value)
+        for value in script_hashes
+    ):
+        raise ValueError("trusted_script_sha256 debe contener hashes SHA-256")
+    if not 1 <= int(cfg.get("max_script_bytes", 1048576)) <= 16777216:
+        raise ValueError("max_script_bytes fuera de límites")
     if str(cfg.get("review_action", "quarantine")).lower() != "quarantine":
         raise ValueError("Solo se admite review_action=quarantine en esta reconstrucción")
     if not 0 <= int(cfg.get("suspicious_score", 45)) <= 100:

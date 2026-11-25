@@ -25,5 +25,7 @@
   "max_expansion_ratio": 250,
   "yara_timeout_seconds": 15,
   "scan_timeout_seconds": 600,
-  "trusted_executable_sha256": []
+  "trusted_executable_sha256": [],
+  "trusted_script_sha256": [],
+  "max_script_bytes": 1048576
 }
