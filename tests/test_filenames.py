@@ -60,7 +60,8 @@ class FilenameTests(unittest.TestCase):
 
     def test_neutral_unicode_name_is_not_suspicious(self):
         for name in ("café.pdf", "写真.jpg", "resumen.final.pdf", "backup.tar.gz",
-                     "normal.exe", "program.ps1", "readme.txt"):
+                     "normal.exe", "program.ps1", "readme.txt",
+                     "app.v2.exe", "program.1.0.exe"):
             with self.subTest(name=name):
                 self.assertEqual(inspect_filename(name).findings, ())
 
@@ -75,6 +76,18 @@ class FilenameTests(unittest.TestCase):
         result = inspect_filename(name)
         self.assertEqual(name, "documento.pdf.e\u200bxe")
         self.assertEqual(result.effective_suffix, ".exe")
+
+    def test_trusted_pe_with_benign_versioned_filename_is_clean(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            path = root / "app.v2.exe"
+            data = make_pe()
+            path.write_bytes(data)
+            result = scan_file(path, {
+                "trusted_executable_sha256": [hashlib.sha256(data).hexdigest()]
+            }, rules_dir=root / "no-yara")
+            self.assertEqual(decide(result).action, "CLEAN")
+            self.assertFalse(any(f.analyzer == "filenames" for f in result.findings))
 
     def test_trusted_script_hash_cannot_override_double_extension(self):
         with tempfile.TemporaryDirectory() as tmp:

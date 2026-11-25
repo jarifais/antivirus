@@ -72,28 +72,23 @@ def inspect_filename(filename: str) -> FilenameInspection:
         report("DOUBLE_EXTENSION", 90,
                "Extensión de documento seguida de una extensión activa",
                block=True)
-    elif active and len(tokens) > 2:
-        report("FILENAME_MULTI_EXT_ACTIVE", 20,
-               "Nombre con varias extensiones y extensión activa final",
-               block=False)
-
     if has_bidi:
         report("FILENAME_BIDI_CONTROL", 75,
                "Controles bidireccionales capaces de alterar el orden visual",
                block=True)
 
     if has_format and not has_bidi:
-        report("FILENAME_INVISIBLE_FORMAT", 75 if active else 20,
+        report("FILENAME_INVISIBLE_FORMAT", 75 if active else 10,
                "Caracteres de formato invisibles en el nombre",
                block=bool(active))
 
     if has_dotlookalike:
-        report("FILENAME_UNICODE_DOT", 75 if active else 20,
+        report("FILENAME_UNICODE_DOT", 75 if active else 10,
                "Separador Unicode visualmente parecido a un punto",
                block=bool(active))
 
     if original != original.rstrip(" ."):
-        report("FILENAME_TRAILING_DOT_SPACE", 75 if active else 20,
+        report("FILENAME_TRAILING_DOT_SPACE", 75 if active else 10,
                "Puntos o espacios finales que Windows puede interpretar de forma distinta",
                block=bool(active))
 

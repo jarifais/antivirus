@@ -17,8 +17,8 @@ para **detectar** posibles engaños; jamás se usa para abrir/mover rutas.
 
 El hallazgo de doble extensión, controles bidireccionales o extensión activa
 visualmente camuflada se **bloquea preventivamente**, pero **NO prueba malware**.
-Nombres neutrales con letras Unicode (p. ej. un título en otro idioma) no se
-penalizan por sí mismos. Los indicios menos fiables se mantienen como señales
+Nombres neutrales con letras Unicode (p. ej. un título en otro idioma) o
+versiones como `app.v2.exe` no se penalizan por sí mismos. Los indicios menos fiables se mantienen como señales
 de revisión. La decisión depende también del motor de contenido: un PE disfrazado
 no debe liberarse por aparecer su hash en una lista de aprobados.
 
