@@ -65,7 +65,7 @@ def load_catalog(path: Path | None = None) -> dict:
                 raise IndicatorCatalogError("Invalid match group")
             for token in group:
                 if (not isinstance(token, str) or
-                    not 2 <= len(token) <= 100 or token != token.strip() or
+                    not 2 <= len(token) <= 100 or not token.strip() or
                     any(ord(ch) < 32 for ch in token) or
                     token != token.casefold()):
                     raise IndicatorCatalogError("Unsafe/non-normalized literal token")
