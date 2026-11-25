@@ -15,6 +15,7 @@ from miniav import __version__, POLICY_VERSION
 from .archives import inspect_zip
 from .pe import PEFormatError, inspect_pe
 from .indicators import load_catalog, scan_indicators
+from .filenames import inspect_filename
 from .scripts import ScriptInspectionError, inspect_script
 from .filetypes import ACTIVE_EXTENSIONS, DECOY_EXTENSIONS, EXECUTABLE_EXTENSIONS, SCRIPT_EXTENSIONS, detect_type
 from .models import Finding, ScanResult
@@ -84,13 +85,10 @@ def scan_file(path: Path | str, config: dict | None = None,
                 after.st_size, after.st_mtime_ns, after.st_ino):
             raise RuntimeError("Archivo modificado durante el análisis")
         detected = detect_type(raw, p)
-        parts = p.name.lower().split(".")
-        ext = parts[-1] if len(parts) > 1 else ""
+        filename_result = inspect_filename(p.name)
+        findings.extend(filename_result.findings)
+        ext = p.suffix.lower().lstrip(".")
         is_active = ext in ACTIVE_EXTENSIONS or suffix in SCRIPT_EXTENSIONS or suffix in EXECUTABLE_EXTENSIONS
-        if len(parts) > 2 and parts[-2] in DECOY_EXTENSIONS and ext in ACTIVE_EXTENSIONS:
-            findings.append(Finding("DOUBLE_EXTENSION", "high", 90,
-                                    "Doble extensión para disimular un ejecutable", "filenames",
-                                    p.name, True))
         if detected == "PE/Windows executable":
             try:
                 pe = inspect_pe(p)
