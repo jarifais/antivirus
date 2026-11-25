@@ -15,6 +15,7 @@ DEFAULT_CONFIG = {
     "max_uncompressed_bytes": 2147483648, "max_member_bytes": 536870912,
     "max_expansion_ratio": 250.0, "yara_timeout_seconds": 15,
     "scan_timeout_seconds": 600,
+    "trusted_executable_sha256": [],
 }
 
 def load_config(path: Path) -> dict:
@@ -85,6 +86,13 @@ def validate_config(cfg: dict, *, create_outputs: bool = False) -> dict[str, Pat
             raise ValueError(f"{key} debe estar en el mismo volumen que Incoming")
         if p.exists() and not p.is_dir():
             raise ValueError(f"{key} no es una carpeta")
+    allowed = cfg.get("trusted_executable_sha256", [])
+    if not isinstance(allowed, list) or any(
+        not isinstance(value, str) or len(value) != 64 or
+        any(ch not in "0123456789abcdefABCDEF" for ch in value)
+        for value in allowed
+    ):
+        raise ValueError("trusted_executable_sha256 debe contener hashes SHA-256")
     if str(cfg.get("review_action", "quarantine")).lower() != "quarantine":
         raise ValueError("Solo se admite review_action=quarantine en esta reconstrucción")
     if not 0 <= int(cfg.get("suspicious_score", 45)) <= 100:
