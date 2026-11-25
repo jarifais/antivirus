@@ -44,3 +44,29 @@ retenidos para revisión, sin afirmarse que contienen malware.
 No existe aún comprobación completa de código dinámico, ofuscación arbitraria,
 firmas criptográficas ni garantía de detección de scripts maliciosos desconocidos.
 Las pruebas son sintéticas y no sustituyen el benchmark con corpus de referencia.
+
+## Catálogo ampliable de indicadores estáticos
+
+El catálogo versionado `miniav/rules/indicators.json` contiene **48**
+reglas curatoriales: 30 sobre texto de
+scripts y 18 sobre imports de PE.
+Cada regla indica ID, descripción, grupos literales, score, bloqueo y técnica
+ATT&CK orientativa. Los grupos se combinan mediante AND y las alternativas
+dentro de cada grupo mediante OR. La coincidencia NO demuestra infección.
+
+No se interpreta código, expresiones regulares arbitrarias ni condiciones
+dinámicas del fichero JSON. El validador rechaza reglas de estructura inesperada,
+duplicadas y catálogos excesivamente grandes. Un error de carga de catálogo
+marca el análisis como incompleto y deniega `CLEAN`.
+
+**Limitaciones:** Es una ampliación concreta de cobertura, no «todos los
+indicadores existentes». Un PE puede resolver APIs dinámicamente, y los scripts
+pueden construir cadenas en tiempo de ejecución; ambas técnicas evaden las
+búsquedas estáticas. También pueden existir falsos positivos. La asignación
+de ATT&CK documenta la hipótesis de detección y no certifica la técnica
+utilizada por el archivo. El fichero de catálogo debe revisarse y versionarse;
+no se activa una descarga automática de reglas no verificadas.
+
+Fuentes técnicas: https://attack.mitre.org/techniques/,
+https://yara.readthedocs.io/en/stable/ y
+https://sigmahq.io/sigma-specification/specification/sigma-rules-specification.html .
