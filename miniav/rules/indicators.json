@@ -1,0 +1,836 @@
+{
+  "schema_version": 1,
+  "catalog_version": "2026.11.25.1",
+  "basis": "Curated static indicators inspired by MITRE ATT&CK; heuristic mappings are not guarantees.",
+  "rules": [
+    {
+      "id": "SC_AMSI_BYPASS",
+      "scope": "script",
+      "groups": [
+        [
+          "amsiutils"
+        ],
+        [
+          "amsiinitfailed",
+          "amsiinitialized"
+        ]
+      ],
+      "score": 70,
+      "blocking": true,
+      "attack": "T1562.001",
+      "description": "Referencia combinada a modificación de AMSI"
+    },
+    {
+      "id": "SC_AMSI_REFLECTION",
+      "scope": "script",
+      "groups": [
+        [
+          "amsiutils"
+        ],
+        [
+          "getfield",
+          "setvalue"
+        ]
+      ],
+      "score": 65,
+      "blocking": true,
+      "attack": "T1562.001",
+      "description": "Indicadores de modificación de AMSI mediante reflexión"
+    },
+    {
+      "id": "SC_DEFENDER_DISABLE",
+      "scope": "script",
+      "groups": [
+        [
+          "set-mppreference"
+        ],
+        [
+          "-disablerealtimemonitoring"
+        ]
+      ],
+      "score": 70,
+      "blocking": true,
+      "attack": "T1562.001",
+      "description": "Comando de desactivación de protección de Defender"
+    },
+    {
+      "id": "SC_DEFENDER_EXCLUSION",
+      "scope": "script",
+      "groups": [
+        [
+          "add-mppreference"
+        ],
+        [
+          "-exclusionpath",
+          "-exclusionprocess"
+        ]
+      ],
+      "score": 55,
+      "blocking": true,
+      "attack": "T1562.001",
+      "description": "Modificación de exclusiones de seguridad"
+    },
+    {
+      "id": "SC_BASE64_EXECUTION",
+      "scope": "script",
+      "groups": [
+        [
+          "frombase64string"
+        ],
+        [
+          "invoke-expression",
+          "iex(",
+          "iex "
+        ]
+      ],
+      "score": 75,
+      "blocking": true,
+      "attack": "T1027",
+      "description": "Decodificación Base64 combinada con ejecución"
+    },
+    {
+      "id": "SC_GZIP_BASE64_EXECUTION",
+      "scope": "script",
+      "groups": [
+        [
+          "gzipstream"
+        ],
+        [
+          "frombase64string"
+        ],
+        [
+          "invoke-expression",
+          "iex(",
+          "iex "
+        ]
+      ],
+      "score": 75,
+      "blocking": true,
+      "attack": "T1027",
+      "description": "Descompresión y ejecución de contenido codificado"
+    },
+    {
+      "id": "SC_ASSEMBLY_MEMORY_LOAD",
+      "scope": "script",
+      "groups": [
+        [
+          "assembly]::load",
+          "assembly.load"
+        ],
+        [
+          "frombase64string",
+          "downloadstring"
+        ]
+      ],
+      "score": 55,
+      "blocking": true,
+      "attack": "T1620",
+      "description": "Carga de ensamblado desde datos codificados o descargados"
+    },
+    {
+      "id": "SC_REMOTE_REGSVR32",
+      "scope": "script",
+      "groups": [
+        [
+          "regsvr32"
+        ],
+        [
+          "scrobj.dll"
+        ]
+      ],
+      "score": 60,
+      "blocking": true,
+      "attack": "T1218.010",
+      "description": "Uso de regsvr32 con scriptlet"
+    },
+    {
+      "id": "SC_MSHTA_REMOTE",
+      "scope": "script",
+      "groups": [
+        [
+          "mshta"
+        ],
+        [
+          "http://",
+          "https://"
+        ]
+      ],
+      "score": 45,
+      "blocking": false,
+      "attack": "T1218.005",
+      "description": "mshta con destino remoto"
+    },
+    {
+      "id": "SC_RUNDLL32_JAVASCRIPT",
+      "scope": "script",
+      "groups": [
+        [
+          "rundll32"
+        ],
+        [
+          "javascript:"
+        ]
+      ],
+      "score": 60,
+      "blocking": true,
+      "attack": "T1218.011",
+      "description": "rundll32 con JavaScript"
+    },
+    {
+      "id": "SC_CERTUTIL_URLCACHE",
+      "scope": "script",
+      "groups": [
+        [
+          "certutil"
+        ],
+        [
+          "-urlcache"
+        ]
+      ],
+      "score": 20,
+      "blocking": false,
+      "attack": "T1105",
+      "description": "Uso de certutil para transferencia"
+    },
+    {
+      "id": "SC_CERTUTIL_DECODE",
+      "scope": "script",
+      "groups": [
+        [
+          "certutil"
+        ],
+        [
+          "-decode",
+          "-decodehex"
+        ]
+      ],
+      "score": 20,
+      "blocking": false,
+      "attack": "T1140",
+      "description": "Uso de certutil para decodificar archivos"
+    },
+    {
+      "id": "SC_BITSADMIN_TRANSFER",
+      "scope": "script",
+      "groups": [
+        [
+          "bitsadmin"
+        ],
+        [
+          "/transfer",
+          "/addfile"
+        ]
+      ],
+      "score": 20,
+      "blocking": false,
+      "attack": "T1197",
+      "description": "Transferencia por BITS"
+    },
+    {
+      "id": "SC_VSSADMIN_SHADOW_DELETE",
+      "scope": "script",
+      "groups": [
+        [
+          "vssadmin"
+        ],
+        [
+          "delete shadows"
+        ]
+      ],
+      "score": 65,
+      "blocking": true,
+      "attack": "T1490",
+      "description": "Eliminación de instantáneas de Windows"
+    },
+    {
+      "id": "SC_WMIC_SHADOW_DELETE",
+      "scope": "script",
+      "groups": [
+        [
+          "wmic"
+        ],
+        [
+          "shadowcopy"
+        ],
+        [
+          "delete"
+        ]
+      ],
+      "score": 65,
+      "blocking": true,
+      "attack": "T1490",
+      "description": "Eliminación de copias sombra mediante WMIC"
+    },
+    {
+      "id": "SC_WBADMIN_CATALOG_DELETE",
+      "scope": "script",
+      "groups": [
+        [
+          "wbadmin"
+        ],
+        [
+          "delete catalog"
+        ]
+      ],
+      "score": 60,
+      "blocking": true,
+      "attack": "T1490",
+      "description": "Eliminación del catálogo de copias de seguridad"
+    },
+    {
+      "id": "SC_BCDEDIT_RECOVERY_OFF",
+      "scope": "script",
+      "groups": [
+        [
+          "bcdedit"
+        ],
+        [
+          "recoveryenabled"
+        ],
+        [
+          "no"
+        ]
+      ],
+      "score": 55,
+      "blocking": true,
+      "attack": "T1490",
+      "description": "Desactivación de recuperación del arranque"
+    },
+    {
+      "id": "SC_SCHTASK_SYSTEM",
+      "scope": "script",
+      "groups": [
+        [
+          "schtasks"
+        ],
+        [
+          "/create"
+        ],
+        [
+          "/ru system"
+        ]
+      ],
+      "score": 35,
+      "blocking": false,
+      "attack": "T1053.005",
+      "description": "Tarea programada con cuenta de sistema"
+    },
+    {
+      "id": "SC_REGISTRY_RUN_KEY",
+      "scope": "script",
+      "groups": [
+        [
+          "reg add"
+        ],
+        [
+          "currentversion\\run"
+        ]
+      ],
+      "score": 35,
+      "blocking": false,
+      "attack": "T1547.001",
+      "description": "Escritura de clave Run de inicio automático"
+    },
+    {
+      "id": "SC_REGISTRY_RUNONCE_KEY",
+      "scope": "script",
+      "groups": [
+        [
+          "reg add"
+        ],
+        [
+          "currentversion\\runonce"
+        ]
+      ],
+      "score": 35,
+      "blocking": false,
+      "attack": "T1547.001",
+      "description": "Escritura de clave RunOnce"
+    },
+    {
+      "id": "SC_LSASS_DUMP",
+      "scope": "script",
+      "groups": [
+        [
+          "lsass"
+        ],
+        [
+          "minidumpwritedump",
+          "comsvcs.dll"
+        ]
+      ],
+      "score": 70,
+      "blocking": true,
+      "attack": "T1003.001",
+      "description": "Referencia combinada a volcado de LSASS"
+    },
+    {
+      "id": "SC_PS_CREDENTIAL_EXPORT",
+      "scope": "script",
+      "groups": [
+        [
+          "lsass"
+        ],
+        [
+          "sekurlsa",
+          "procdump"
+        ]
+      ],
+      "score": 70,
+      "blocking": true,
+      "attack": "T1003.001",
+      "description": "Indicadores de extracción de credenciales de LSASS"
+    },
+    {
+      "id": "SC_JS_ATOB_EVAL",
+      "scope": "script",
+      "groups": [
+        [
+          "atob("
+        ],
+        [
+          "eval("
+        ]
+      ],
+      "score": 30,
+      "blocking": false,
+      "attack": "T1027",
+      "description": "JavaScript Base64 seguido de evaluación"
+    },
+    {
+      "id": "SC_JS_HEX_EVAL",
+      "scope": "script",
+      "groups": [
+        [
+          "string.fromcharcode"
+        ],
+        [
+          "eval("
+        ]
+      ],
+      "score": 25,
+      "blocking": false,
+      "attack": "T1027",
+      "description": "JavaScript construido por códigos de carácter y evaluado"
+    },
+    {
+      "id": "SC_PY_PICKLE_NETWORK",
+      "scope": "script",
+      "groups": [
+        [
+          "pickle.loads",
+          "pickle.load("
+        ],
+        [
+          "requests.get",
+          "urllib.request"
+        ]
+      ],
+      "score": 20,
+      "blocking": false,
+      "attack": "T1059.006",
+      "description": "Carga de objetos serializados junto a transferencia de red"
+    },
+    {
+      "id": "SC_PY_NETWORK_SUBPROCESS",
+      "scope": "script",
+      "groups": [
+        [
+          "urllib.request",
+          "requests.get"
+        ],
+        [
+          "subprocess.popen",
+          "os.system("
+        ]
+      ],
+      "score": 20,
+      "blocking": false,
+      "attack": "T1059.006",
+      "description": "Red y ejecución de procesos en Python"
+    },
+    {
+      "id": "SC_CURL_PIPE_SHELL",
+      "scope": "script",
+      "groups": [
+        [
+          "curl "
+        ],
+        [
+          "| sh",
+          "| bash"
+        ]
+      ],
+      "score": 35,
+      "blocking": false,
+      "attack": "T1059.004",
+      "description": "Descarga conectada a intérprete de comandos"
+    },
+    {
+      "id": "SC_WGET_PIPE_SHELL",
+      "scope": "script",
+      "groups": [
+        [
+          "wget "
+        ],
+        [
+          "| sh",
+          "| bash"
+        ]
+      ],
+      "score": 35,
+      "blocking": false,
+      "attack": "T1059.004",
+      "description": "Descarga con ejecución directa por shell"
+    },
+    {
+      "id": "SC_POWERSHELL_NODISPLAY",
+      "scope": "script",
+      "groups": [
+        [
+          "powershell"
+        ],
+        [
+          "-windowstyle hidden",
+          "-w hidden"
+        ]
+      ],
+      "score": 15,
+      "blocking": false,
+      "attack": "T1564.003",
+      "description": "PowerShell con ventana oculta"
+    },
+    {
+      "id": "SC_REMOTE_SERVICE_CREATE",
+      "scope": "script",
+      "groups": [
+        [
+          "sc.exe",
+          "sc "
+        ],
+        [
+          "create"
+        ],
+        [
+          "\\\\"
+        ]
+      ],
+      "score": 20,
+      "blocking": false,
+      "attack": "T1543.003",
+      "description": "Posible creación de servicio remoto"
+    },
+    {
+      "id": "PE_REMOTE_THREAD",
+      "scope": "pe_import",
+      "groups": [
+        [
+          "createremotethread",
+          "ntcreatethreadex"
+        ],
+        [
+          "writeprocessmemory",
+          "ntwritevirtualmemory"
+        ]
+      ],
+      "score": 70,
+      "blocking": true,
+      "attack": "T1055",
+      "description": "Combinación de imports de escritura e hilo remoto"
+    },
+    {
+      "id": "PE_REMOTE_MEMORY",
+      "scope": "pe_import",
+      "groups": [
+        [
+          "virtualallocex"
+        ],
+        [
+          "writeprocessmemory"
+        ]
+      ],
+      "score": 65,
+      "blocking": true,
+      "attack": "T1055",
+      "description": "Reserva y escritura en memoria de otro proceso"
+    },
+    {
+      "id": "PE_HOLLOWING_IMPORTS",
+      "scope": "pe_import",
+      "groups": [
+        [
+          "ntunmapviewofsection",
+          "zwunmapviewofsection"
+        ],
+        [
+          "writeprocessmemory"
+        ]
+      ],
+      "score": 70,
+      "blocking": true,
+      "attack": "T1055.012",
+      "description": "Imports compatibles con vaciado de proceso"
+    },
+    {
+      "id": "PE_CREDENTIAL_DUMPING",
+      "scope": "pe_import",
+      "groups": [
+        [
+          "minidumpwritedump"
+        ],
+        [
+          "openprocess"
+        ]
+      ],
+      "score": 55,
+      "blocking": false,
+      "attack": "T1003.001",
+      "description": "Función de volcado de memoria y acceso a procesos"
+    },
+    {
+      "id": "PE_CREDENTIAL_HELPERS",
+      "scope": "pe_import",
+      "groups": [
+        [
+          "lsalookupauthenticationpackage"
+        ],
+        [
+          "lsalogonuser"
+        ]
+      ],
+      "score": 30,
+      "blocking": false,
+      "attack": "T1003",
+      "description": "Imports de autenticación LSA"
+    },
+    {
+      "id": "PE_KEYBOARD_HOOK",
+      "scope": "pe_import",
+      "groups": [
+        [
+          "setwindowshookexa",
+          "setwindowshookexw"
+        ],
+        [
+          "getasynckeystate",
+          "getkeyboardstate"
+        ]
+      ],
+      "score": 40,
+      "blocking": false,
+      "attack": "T1056.001",
+      "description": "Indicadores combinados de captura de teclado"
+    },
+    {
+      "id": "PE_SCREEN_CAPTURE",
+      "scope": "pe_import",
+      "groups": [
+        [
+          "bitblt",
+          "printwindow"
+        ],
+        [
+          "getdc",
+          "getwindowdc"
+        ]
+      ],
+      "score": 15,
+      "blocking": false,
+      "attack": "T1113",
+      "description": "Funciones de captura de pantalla"
+    },
+    {
+      "id": "PE_REGISTRY_AUTORUN",
+      "scope": "pe_import",
+      "groups": [
+        [
+          "regsetvalueexa",
+          "regsetvalueexw"
+        ],
+        [
+          "regcreatekeyexa",
+          "regcreatekeyexw"
+        ]
+      ],
+      "score": 15,
+      "blocking": false,
+      "attack": "T1547.001",
+      "description": "Funciones de edición de registro"
+    },
+    {
+      "id": "PE_SERVICE_INSTALL",
+      "scope": "pe_import",
+      "groups": [
+        [
+          "createservicea",
+          "createservicew"
+        ],
+        [
+          "startservicea",
+          "startservicew"
+        ]
+      ],
+      "score": 20,
+      "blocking": false,
+      "attack": "T1543.003",
+      "description": "Funciones de instalación de servicios"
+    },
+    {
+      "id": "PE_SERVICE_CONTROL",
+      "scope": "pe_import",
+      "groups": [
+        [
+          "openservicea",
+          "openservicew"
+        ],
+        [
+          "controlservice"
+        ]
+      ],
+      "score": 20,
+      "blocking": false,
+      "attack": "T1562.001",
+      "description": "Funciones de control de servicios"
+    },
+    {
+      "id": "PE_ANTI_DEBUG_COMBO",
+      "scope": "pe_import",
+      "groups": [
+        [
+          "isdebuggerpresent"
+        ],
+        [
+          "checkremotedebuggerpresent"
+        ]
+      ],
+      "score": 15,
+      "blocking": false,
+      "attack": "T1622",
+      "description": "Indicadores de antidepuración"
+    },
+    {
+      "id": "PE_REMOTE_SHELL_WINHTTP",
+      "scope": "pe_import",
+      "groups": [
+        [
+          "winhttpconnect"
+        ],
+        [
+          "createprocessa",
+          "createprocessw"
+        ]
+      ],
+      "score": 20,
+      "blocking": false,
+      "attack": "T1105",
+      "description": "Comunicación HTTP combinada con creación de proceso"
+    },
+    {
+      "id": "PE_REMOTE_SHELL_WININET",
+      "scope": "pe_import",
+      "groups": [
+        [
+          "internetopenurla",
+          "internetopenurlw"
+        ],
+        [
+          "createprocessa",
+          "createprocessw"
+        ]
+      ],
+      "score": 20,
+      "blocking": false,
+      "attack": "T1105",
+      "description": "Acceso remoto combinado con creación de proceso"
+    },
+    {
+      "id": "PE_CRYPTO_FILE_IO",
+      "scope": "pe_import",
+      "groups": [
+        [
+          "cryptencrypt",
+          "bcryptencrypt"
+        ],
+        [
+          "writefile"
+        ]
+      ],
+      "score": 15,
+      "blocking": false,
+      "attack": "T1486",
+      "description": "Cifrado y escritura de archivos; uso también legítimo"
+    },
+    {
+      "id": "PE_DIRECT_DISK_IO",
+      "scope": "pe_import",
+      "groups": [
+        [
+          "createfilea",
+          "createfilew"
+        ],
+        [
+          "deviceiocontrol"
+        ]
+      ],
+      "score": 10,
+      "blocking": false,
+      "attack": "T1561",
+      "description": "Funciones de acceso de bajo nivel a dispositivos"
+    },
+    {
+      "id": "PE_REFLECTIVE_LOADING",
+      "scope": "pe_import",
+      "groups": [
+        [
+          "virtualalloc"
+        ],
+        [
+          "loadlibrarya",
+          "loadlibraryw"
+        ],
+        [
+          "getprocaddress"
+        ]
+      ],
+      "score": 20,
+      "blocking": false,
+      "attack": "T1620",
+      "description": "Reserva de memoria y carga dinámica de módulos"
+    },
+    {
+      "id": "PE_PROCESS_DISCOVERY",
+      "scope": "pe_import",
+      "groups": [
+        [
+          "createtoolhelp32snapshot"
+        ],
+        [
+          "process32firstw",
+          "process32first"
+        ]
+      ],
+      "score": 10,
+      "blocking": false,
+      "attack": "T1057",
+      "description": "Enumeración de procesos"
+    },
+    {
+      "id": "PE_REMOTE_REGISTRY",
+      "scope": "pe_import",
+      "groups": [
+        [
+          "regconnectregistrya",
+          "regconnectregistryw"
+        ],
+        [
+          "regsetvalueexa",
+          "regsetvalueexw"
+        ]
+      ],
+      "score": 20,
+      "blocking": false,
+      "attack": "T1112",
+      "description": "Edición de registro remoto"
+    }
+  ]
+}

@@ -14,6 +14,7 @@ from pathlib import Path
 from miniav import __version__, POLICY_VERSION
 from .archives import inspect_zip
 from .pe import PEFormatError, inspect_pe
+from .indicators import load_catalog, scan_indicators
 from .scripts import ScriptInspectionError, inspect_script
 from .filetypes import ACTIVE_EXTENSIONS, DECOY_EXTENSIONS, EXECUTABLE_EXTENSIONS, SCRIPT_EXTENSIONS, detect_type
 from .models import Finding, ScanResult
@@ -52,6 +53,7 @@ def scan_file(path: Path | str, config: dict | None = None,
     yara_matches: list[str] = []
     pe_details = None
     script_details = None
+    indicator_catalog = None
     trusted_pe = False
     trusted_script = False
     complete = True
@@ -92,6 +94,9 @@ def scan_file(path: Path | str, config: dict | None = None,
         if detected == "PE/Windows executable":
             try:
                 pe = inspect_pe(p)
+                catalog = load_catalog()
+                indicator_catalog = {"version": catalog["version"], "sha256": catalog["sha256"]}
+                findings.extend(scan_indicators(catalog, "pe_import", pe.imports))
                 imported = {entry.rsplit("!", 1)[-1].lower() for entry in pe.imports}
                 suspicious_apis = sorted(imported.intersection({
                     "virtualallocex", "writeprocessmemory",
@@ -153,6 +158,8 @@ def scan_file(path: Path | str, config: dict | None = None,
                 if size > script_limit:
                     raise ScriptInspectionError("El script excede el límite inspeccionable")
                 script_info = inspect_script(p.read_bytes(), max_size=script_limit)
+                catalog = load_catalog()
+                indicator_catalog = {"version": catalog["version"], "sha256": catalog["sha256"]}
                 trusted_script = sha256.hexdigest() in {v.lower() for v in allowed_script}
                 script_details = {"encoding": script_info.encoding,
                                   "inspected_bytes": size,
@@ -229,6 +236,7 @@ def scan_file(path: Path | str, config: dict | None = None,
             "ml": False, "reconstructed": True,
             "pe": pe_details, "trusted_sha256": trusted_pe,
             "script": script_details, "trusted_script_sha256": trusted_script,
+            "indicator_catalog": indicator_catalog,
         }, engine_version=__version__, policy_version=POLICY_VERSION,
         rules_version=rules_ver, scanned_at=now,
         error="; ".join(errors) if errors else None)

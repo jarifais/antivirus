@@ -5,6 +5,7 @@ import re
 from dataclasses import dataclass
 
 from .models import Finding
+from .indicators import load_catalog, scan_indicators
 
 
 class ScriptInspectionError(ValueError):
@@ -15,6 +16,7 @@ class ScriptInspectionError(ValueError):
 class ScriptInfo:
     encoding: str
     findings: tuple[Finding, ...]
+    catalog_version: str = ""
 
 
 def _text(data: bytes) -> tuple[str, str]:
@@ -86,4 +88,6 @@ def inspect_script(data: bytes, *, max_size: int = 1024 * 1024) -> ScriptInfo:
     ):
         add("SCRIPT_PERSISTENCE", 65, "Persistence-related command or registry path")
 
-    return ScriptInfo(encoding, tuple(findings))
+    catalog = load_catalog()
+    findings.extend(scan_indicators(catalog, "script", content))
+    return ScriptInfo(encoding, tuple(findings), catalog["version"])
