@@ -8,7 +8,7 @@ Proyecto de análisis estático de archivos para la carpeta **Incoming de eMule*
 
 - [Hoja de ruta de los 16 puntos](ROADMAP.md) y [lista pública y actualizable en GitHub Issues](https://github.com/jarifais/antivirus/issues/9).
 - [Tareas accesibles para nuevos colaboradores](https://github.com/jarifais/antivirus/issues/7) y [cómo contribuir](CONTRIBUTING.md).
-- Estado: **bloque 1 (ejecutables y scripts) implementado provisionalmente**, pero pendiente validar sensibilidad y falsos positivos con corpus representativo. Siguiente punto: **bloque 2, dobles extensiones** ([issue #6](https://github.com/jarifais/antivirus/issues/6)).
+- Estado: **bloque 1 (ejecutables y scripts) implementado provisionalmente**, pero pendiente validar sensibilidad y falsos positivos con corpus representativo. El **bloque 2 (dobles extensiones)** también está implementado provisionalmente y probado (PR #10), pendiente corpus de falsos positivos ([#6](https://github.com/jarifais/antivirus/issues/6)). Siguiente punto: **bloque 3, contenido ejecutable camuflado** ([#11](https://github.com/jarifais/antivirus/issues/11)).
 - **Licencia propietaria: todos los derechos reservados** ([LICENSE](LICENSE)). Prohibida la redistribución y comercialización sin autorización escrita, con las excepciones legales y los usos permitidos por GitHub. Quienes contribuyan código deberán firmar un acuerdo individual de cesión antes de que se integre ([CONTRIBUTING.md](CONTRIBUTING.md)). Revisión jurídica formal pendiente en [#8](https://github.com/jarifais/antivirus/issues/8).
 
 ## Referencias del proyecto
