@@ -20,6 +20,21 @@ class PETests(unittest.TestCase):
         file.write_bytes(data)
         return scan_file(file, config, rules_dir=self.root / "no-yara")
 
+    @unittest.skipUnless(__import__("os").name == "nt", "Windows-only PE smoke test")
+    def test_real_windows_pe_is_parseable_without_execution(self):
+        import os
+        system32 = Path(os.environ["WINDIR"]) / "System32"
+        path = system32 / "notepad.exe"
+        if not path.is_file():
+            self.skipTest("Windows Notepad is unavailable")
+        info = inspect_pe(path)
+        self.assertIn(info.bits, (32, 64))
+        self.assertGreater(len(info.sections), 0)
+        # Never launch the sample, never equate structural validity with safety.
+        report = scan_file(path, rules_dir=self.root / "no-yara")
+        self.assertTrue(report.analysis_complete, report.errors)
+        self.assertEqual(decide(report).action, "QUARANTINED")
+
     def test_valid_pe_parser(self):
         file = self.root / "valid.exe"
         file.write_bytes(make_pe())
