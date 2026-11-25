@@ -40,7 +40,7 @@
 
 - [#7 — Tests benignos/sintéticos y documentación](https://github.com/jarifais/antivirus/issues/7).
 - [#6 — Doble extensión, próximo punto](https://github.com/jarifais/antivirus/issues/6).
-- [#8 — Decisión de licencia y condiciones de contribución](https://github.com/jarifais/antivirus/issues/8).
-- [CONTRIBUTING.md](CONTRIBUTING.md) y [SECURITY.md](SECURITY.md).
+- [#8 — Aviso propietario publicado; revisión jurídica del acuerdo de contribución pendiente](https://github.com/jarifais/antivirus/issues/8).
+- [LICENSE](LICENSE), [CONTRIBUTING.md](CONTRIBUTING.md), [plantilla de cesión](CONTRIBUTOR_AGREEMENT_TEMPLATE.md) y [SECURITY.md](SECURITY.md).
 
 Los tests existentes cubren casos técnicos, pero **faltan corpus representativos benignos y maliciosos, métricas de falsos positivos y auditoría independiente** antes del cierre del primer bloque a nivel de producto.

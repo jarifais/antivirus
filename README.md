@@ -9,7 +9,7 @@ Proyecto de análisis estático de archivos para la carpeta **Incoming de eMule*
 - [Hoja de ruta de los 16 puntos](ROADMAP.md) y [lista pública y actualizable en GitHub Issues](https://github.com/jarifais/antivirus/issues/9).
 - [Tareas accesibles para nuevos colaboradores](https://github.com/jarifais/antivirus/issues/7) y [cómo contribuir](CONTRIBUTING.md).
 - Estado: **bloque 1 (ejecutables y scripts) implementado provisionalmente**, pero pendiente validar sensibilidad y falsos positivos con corpus representativo. Siguiente punto: **bloque 2, dobles extensiones** ([issue #6](https://github.com/jarifais/antivirus/issues/6)).
-- El repositorio no tiene todavía licencia expresa; la decisión está pendiente en [#8](https://github.com/jarifais/antivirus/issues/8).
+- **Licencia propietaria: todos los derechos reservados** ([LICENSE](LICENSE)). Prohibida la redistribución y comercialización sin autorización escrita, con las excepciones legales y los usos permitidos por GitHub. Quienes contribuyan código deberán firmar un acuerdo individual de cesión antes de que se integre ([CONTRIBUTING.md](CONTRIBUTING.md)). Revisión jurídica formal pendiente en [#8](https://github.com/jarifais/antivirus/issues/8).
 
 ## Referencias del proyecto
 
@@ -32,6 +32,6 @@ Consultar [estado de migración](docs/MIGRATION_STATUS.md). El archivo ZIP origi
 
 ## Código, licencia y muestras
 
-**Repositorio público no equivale a software de código abierto.** No se ha definido una licencia de redistribución/modificación; cualquier elección de licencia requiere aprobación expresa del titular.
+**MiniAntivirus es propietario y no tiene licencia de código abierto.** El titular se reserva los derechos de explotación del material que legítimamente le pertenezca o se le haya cedido. Ninguna persona adquiere derechos de redistribución o comercialización por acceder al repositorio, salvo autorización escrita, derechos legalmente reconocidos y usos permitidos por GitHub. Ver [LICENSE](LICENSE), [CONTRIBUTING.md](CONTRIBUTING.md) y [plantilla de cesión por aportación](CONTRIBUTOR_AGREEMENT_TEMPLATE.md).
 
 No subir malware real, muestras históricas ejecutables, datos de usuarios, diagnósticos reales, archivos de cuarentena ni secretos. Ver [SECURITY.md](SECURITY.md).

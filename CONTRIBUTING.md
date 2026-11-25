@@ -1,32 +1,60 @@
 # Contribuir a MiniAntivirus
 
-Gracias por interesarte en la seguridad y calidad del proyecto.
+MiniAntivirus es un proyecto experimental con repositorio público y
+**licencia propietaria**: [LICENSE](LICENSE). **No es open source**.
 
-## Estado y derechos
+## Colaboración voluntaria
 
-MiniAntivirus es un proyecto de seguridad **experimental** y el repositorio es público, pero **aún no hay licencia expresa para reutilizar o redistribuir el código**. La política sobre recepción de contribuciones de código está pendiente de decisión del propietario en [#8](https://github.com/jarifais/antivirus/issues/8).
+Las aportaciones pueden ser gratuitas, pero el código original que escriba
+otra persona no pasa automáticamente a ser propiedad del mantenedor.
+El titular reserva la explotación y comercialización de MiniAntivirus.
+No se ofrece pago, salario, regalías, participación empresarial ni derecho
+de explotación por colaborar, **sin perjuicio de derechos irrenunciables**.
 
-Puedes colaborar desde ahora con **incidencias, observaciones técnicas, propuestas de arquitectura, revisión y resultados reproducibles con datos inofensivos**. Antes de preparar o enviar cambios de código, consulta las condiciones con el mantenedor mediante una issue; no debe inferirse que publicar un repositorio lo convierte en software de código abierto.
+Puedes abrir **issues** con propuestas, informes de errores o resultados
+sintéticos de tests. La recepción de código, documentación original u
+otros materiales protegidos de terceros solo se hará tras cumplir la
+política de derechos.
 
-## Por dónde empezar
+### Requisito ANTES de fusionar una aportación externa
 
-- [Seguimiento de los 16 puntos](https://github.com/jarifais/antivirus/issues/9).
-- [Tareas de tests y documentación](https://github.com/jarifais/antivirus/issues/7).
-- [Próximo bloque: dobles extensiones](https://github.com/jarifais/antivirus/issues/6).
-- [Validación de la eficacia del primer bloque](https://github.com/jarifais/antivirus/issues/4).
+1. Abrir una issue con el alcance propuesto. No subir material de terceros
+   sin permiso.
+2. Identificar los archivos y commits de la aportación concreta.
+3. Formalizar **por escrito** un acuerdo individual de cesión exclusiva de
+   los derechos patrimoniales de explotación de esa aportación al titular
+   legítimo del proyecto, **a título gratuito y dentro de los límites
+   legales**. Modelo: [CONTRIBUTOR_AGREEMENT_TEMPLATE.md](CONTRIBUTOR_AGREEMENT_TEMPLATE.md).
+4. Conservar el acuerdo firmado **fuera del repositorio público**. El
+   propietario verificará la firma y la cadena de titularidad **antes de
+   fusionar el PR**. La mera entrega del PR o aceptación del aviso de
+   licencia no equivale por sí sola a la firma de una cesión.
+5. Si no existe acuerdo válido, no se integrará el código propuesto.
+   Los derechos morales y otros derechos irrenunciables del autor se
+   respetan siempre.
 
-Abre una issue para proponer un caso concreto, con entrada **sintética**, resultado esperado, sistema operativo y criterios de aceptación. Si te autorizan a enviar un cambio de código, enlaza la issue desde el PR y añade tests de regresión.
+**Nota:** el modelo debe ser revisado por asesoramiento legal cualificado
+antes de emplearlo como contrato vinculante.
 
-## Normas obligatorias
+## Tareas para quienes quieran participar
 
-1. **No subir malware real**, muestras peligrosas, ejecutables de cuarentena, dumps, bases de datos de usuario, capturas de datos sensibles ni credenciales.
-2. No ejecutar archivos sospechosos ni pedir a otros que los ejecuten para validar un PR. Las pruebas públicas deben ser inofensivas y reproducibles.
-3. Mantener `ERROR != CLEAN`. Un archivo no inspeccionable no debe liberarse por defecto.
-4. Distinguir detección de **indicadores** de confirmación de infección. Documentar límites y falsos positivos.
-5. Ejecutar `python -m compileall -q .` y `python -m unittest discover -s tests -v`, y comprobar GitHub Actions en Windows y Linux.
-6. Evitar nuevas dependencias, servicios externos, telemetría o cambios de política de seguridad sin discusión previa.
-7. Para divulgación responsable, seguir [SECURITY.md](SECURITY.md) y no publicar detalles explotables en issues abiertas.
+- [Hoja de ruta — 16 puntos](https://github.com/jarifais/antivirus/issues/9).
+- [Pruebas benignas/sintéticas y documentación](https://github.com/jarifais/antivirus/issues/7).
+- [Bloque 2: extensiones engañosas](https://github.com/jarifais/antivirus/issues/6).
+- [Validación del bloque 1](https://github.com/jarifais/antivirus/issues/4).
 
-## Cómo se gestionará el avance
+## Requisitos de seguridad y calidad
 
-La [issue #9](https://github.com/jarifais/antivirus/issues/9) es la lista de tareas **editable**. Un punto se considera terminado solo si hay pruebas relevantes, revisión y evidencias en una issue o PR. El responsable del repositorio actualizará la hoja de ruta y podrá dividir los puntos en tareas menores según avance el proyecto.
+- No subir **malware real**, archivos de cuarentena, datos personales,
+  secretos, informes sensibles ni credenciales.
+- No ejecutar muestras sospechosas en pruebas públicas.
+- Mantener la política `ERROR != CLEAN`.
+- Justificar indicadores, probar falsos positivos y documentar límites.
+- Cuando una aportación de código esté autorizada y documentada, incluir
+  tests y comprobar `python -m compileall -q .`,
+  `python -m unittest discover -s tests -v` y CI en Windows y Linux.
+- Seguir [SECURITY.md](SECURITY.md) para divulgación responsable.
+
+La lectura, visualización y forks dentro de GitHub siguen sujetos a
+los términos de GitHub, y no confieren licencia general de
+redistribución o comercialización fuera de la plataforma.

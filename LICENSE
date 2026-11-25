@@ -1,0 +1,67 @@
+MiniAntivirus — AVISO DE LICENCIA PROPIETARIA
+Copyright © 2026. Titular identificado en este proyecto como «jarifais».
+TODOS LOS DERECHOS RESERVADOS. NO ES UNA LICENCIA DE CÓDIGO ABIERTO.
+
+1. TITULARIDAD Y ALCANCE
+Los derechos de explotación de los contenidos originales de MiniAntivirus
+pertenecen a sus respectivos titulares legales. El mantenedor «jarifais»
+reivindica y reserva los derechos de los materiales que haya creado o que
+le hayan sido válidamente cedidos. Este aviso no convierte en propiedad
+del mantenedor contribuciones ajenas sin cesión válida ni modifica las
+licencias obligatorias de terceros que pudieran existir.
+
+2. SIN LICENCIA GENERAL DE REUTILIZACIÓN
+Salvo autorización previa, expresa y por escrito del titular de los
+derechos correspondiente, no se concede permiso para reproducir,
+redistribuir, republicar, sublicenciar, vender, explotar comercialmente,
+incorporar a otros productos, transformar, modificar ni realizar obras
+derivadas del material sujeto a este aviso, más allá de lo permitido
+expresamente por la legislación aplicable y por los términos de GitHub.
+El acceso público al código no constituye licencia de uso libre.
+
+3. COMERCIALIZACIÓN
+La explotación comercial del software original de MiniAntivirus queda
+reservada exclusivamente a su titular legítimo y a las personas que él
+autorice expresamente por escrito. Ningún colaborador o tercero adquiere
+por acceder al repositorio un derecho a comercializar, distribuir o
+conceder sublicencias sobre MiniAntivirus.
+
+4. EXCEPCIÓN INEVITABLE DE LA PLATAFORMA
+Mientras el repositorio sea público, los Términos del Servicio de GitHub
+autorizan a otros usuarios a visualizar el contenido y realizar forks, así
+como ciertos usos dentro del Servicio. Este aviso no pretende revocar
+esas autorizaciones contractuales, ni limitar excepciones legales
+imperativas. Un fork permitido por GitHub NO concede por sí solo una
+licencia general para distribuir el software fuera de GitHub o venderlo.
+
+5. CONTRIBUCIONES VOLUNTARIAS
+La publicación de un pull request no transmite automáticamente al
+mantenedor la titularidad de los derechos de la persona colaboradora.
+La incorporación de código externo requiere un acuerdo escrito individual
+para la aportación identificada, que establezca la cesión exclusiva de
+derechos de explotación a título gratuito, dentro de los límites legales
+aplicables. Véanse CONTRIBUTING.md y
+CONTRIBUTOR_AGREEMENT_TEMPLATE.md.
+
+La colaboración no concede automáticamente salario, remuneración,
+royalties, participaciones, derechos de control o derechos comerciales
+sobre MiniAntivirus. Esta declaración no suprime derechos morales,
+remuneraciones legales imperativas ni otros derechos irrenunciables.
+
+6. PROTECCIÓN Y AUSENCIA DE GARANTÍAS
+MiniAntivirus es experimental. Se ofrece TAL CUAL, sin garantías en la
+máxima medida permitida por la legislación aplicable. No debe utilizarse
+como sustituto de una solución antimalware probada.
+
+7. SOLICITUDES DE PERMISO
+Solicitar autorización al mantenedor del repositorio
+https://github.com/jarifais/antivirus antes de cualquier uso que requiera
+permiso. Toda autorización debe identificar los materiales, derechos,
+finalidad y condiciones concedidos.
+
+8. LEY APLICABLE
+Este aviso se interpretará dentro de la legislación de propiedad
+intelectual aplicable. No constituye por sí solo un contrato firmado
+con personas colaboradoras, ni sustituye el asesoramiento jurídico.
+
+Versión del aviso: 2026-11-25.
