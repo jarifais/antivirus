@@ -116,7 +116,7 @@
     },
     {
       "name": "invoice.pdf.․exe",
-      "expected_code": "DOUBLE_EXTENSION"
+      "expected_code": "DOUBLE_EXTENSION_OBSCURED"
     },
     {
       "name": "invoice.pdf.ｅｘｅ",
