@@ -107,6 +107,15 @@ class FilenameTests(unittest.TestCase):
         self.assertTrue(any(f.code == "FILENAME_ADS_LIKE" for f in result.findings))
         self.assertFalse(any(f.blocking for f in result.findings))
 
+    def test_low_risk_ads_and_controls_stay_below_review_threshold(self):
+        # A single colon or tab in an inert filename is not malware proof.
+        for name in ("appointment:notes.txt", "notes:\t.txt", "hello\t.txt"):
+            with self.subTest(name=name):
+                result = inspect_filename(name)
+                self.assertLess(sum(f.score for f in result.findings), 20)
+                self.assertFalse(any(f.blocking for f in result.findings))
+                self.assertTrue(all(f.severity == "low" for f in result.findings))
+
     def test_hidden_active_extension(self):
         self.assert_codes(".exe", "FILENAME_HIDDEN_ACTIVE")
 

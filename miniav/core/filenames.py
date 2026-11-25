@@ -84,7 +84,7 @@ def inspect_filename(filename: str) -> FilenameInspection:
 
     def report(code: str, points: int, message: str, *, block: bool) -> None:
         findings.append(Finding(
-            code, "high" if points >= 45 else "medium", points, message,
+            code, "high" if points >= 45 else "medium" if points >= 20 else "low", points, message,
             "filenames", label, block,
         ))
 
@@ -102,7 +102,7 @@ def inspect_filename(filename: str) -> FilenameInspection:
                block=False)
     if has_control:
         control_risk = bool(active or decoy_before_suffix)
-        report("FILENAME_UNSAFE_CONTROL", 75 if control_risk else 20,
+        report("FILENAME_UNSAFE_CONTROL", 75 if control_risk else 5,
                "Carácter de control en nombre que puede confundir al usuario",
                block=control_risk)
     if has_bidi:
@@ -143,7 +143,7 @@ def inspect_filename(filename: str) -> FilenameInspection:
                block=False)
 
     if ":" in original:
-        report("FILENAME_ADS_LIKE", 75 if active or ads_active else 20,
+        report("FILENAME_ADS_LIKE", 75 if active or ads_active else 5,
                "Nombre con dos puntos: posible flujo alternativo NTFS",
                block=bool(active or ads_active))
 
