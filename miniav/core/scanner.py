@@ -169,7 +169,7 @@ def scan_file(path: Path | str, config: dict | None = None,
             findings.append(Finding("ACTIVE_FILE", "medium", 50,
                                     "Tipo activo: revisión antes de liberar", "filetypes"))
         if detected in {"PE/Windows executable", "ELF executable/object", "Mach-O executable/object"}:
-            if not is_active:
+            if (detected == "PE/Windows executable" and suffix not in EXECUTABLE_EXTENSIONS) or not is_active:
                 findings.append(Finding("MISMATCH_EXECUTABLE", "high", 85,
                                         "Ejecutable con extensión inesperada", "filetypes",
                                         p.name, True))

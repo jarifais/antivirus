@@ -56,6 +56,13 @@ class PETests(unittest.TestCase):
         result = self.scan(make_pe(), name="video.mkv")
         self.assertEqual(decide(result).action, "QUARANTINED")
 
+    def test_disguised_pe_script_extension_stays_blocked_even_if_trusted(self):
+        data = make_pe()
+        result = self.scan(data, name="update.ps1", config={
+            "trusted_executable_sha256": [hashlib.sha256(data).hexdigest()]})
+        self.assertEqual(decide(result).action, "QUARANTINED")
+        self.assertTrue(any(f.code == "MISMATCH_EXECUTABLE" for f in result.findings))
+
     def test_double_extension_still_blocks(self):
         data = make_pe()
         result = self.scan(data, name="factura.pdf.exe", config={
