@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "source": "Curated harmless filename strings; synthetic coverage fixtures, not measured malware precision",
+  "positive": [
+    {
+      "name": "invoice.pdf.exe",
+      "expected_code": "DOUBLE_EXTENSION"
+    },
+    {
+      "name": "invoice.pdf.v2.exe",
+      "expected_code": "DOUBLE_EXTENSION_OBSCURED"
+    },
+    {
+      "name": "invoice.pdf........exe",
+      "expected_code": "DOUBLE_EXTENSION_OBSCURED"
+    },
+    {
+      "name": "invoice.pdf.version.2026.exe",
+      "expected_code": "DOUBLE_EXTENSION_OBSCURED"
+    },
+    {
+      "name": "invoice.pdf. .cmd",
+      "expected_code": "DOUBLE_EXTENSION_OBSCURED"
+    },
+    {
+      "name": "contract.docx.ps1",
+      "expected_code": "DOUBLE_EXTENSION"
+    },
+    {
+      "name": "payroll.xlsx.bat",
+      "expected_code": "DOUBLE_EXTENSION"
+    },
+    {
+      "name": "table.csv.js",
+      "expected_code": "DOUBLE_EXTENSION"
+    },
+    {
+      "name": "photo.jpeg.scr",
+      "expected_code": "DOUBLE_EXTENSION"
+    },
+    {
+      "name": "photo.jpg.dll",
+      "expected_code": "DOUBLE_EXTENSION"
+    },
+    {
+      "name": "video.mkv.com",
+      "expected_code": "DOUBLE_EXTENSION"
+    },
+    {
+      "name": "slide.pptx.cpl",
+      "expected_code": "DOUBLE_EXTENSION"
+    },
+    {
+      "name": "notes.rtf.vbs",
+      "expected_code": "DOUBLE_EXTENSION"
+    },
+    {
+      "name": "readme.txt.jse",
+      "expected_code": "DOUBLE_EXTENSION"
+    },
+    {
+      "name": "invoice。pdf。exe",
+      "expected_code": "DOUBLE_EXTENSION"
+    },
+    {
+      "name": "invoice．pdf．exe",
+      "expected_code": "DOUBLE_EXTENSION"
+    },
+    {
+      "name": "invoice.pdf.ехе",
+      "expected_code": "FILENAME_CONFUSABLE_EXTENSION"
+    },
+    {
+      "name": "invoice.pdf.e​xe",
+      "expected_code": "FILENAME_INVISIBLE_FORMAT"
+    },
+    {
+      "name": "invoice.pdf.ps⁠1",
+      "expected_code": "FILENAME_INVISIBLE_FORMAT"
+    },
+    {
+      "name": "invoice‮exe.pdf",
+      "expected_code": "FILENAME_BIDI_CONTROL"
+    },
+    {
+      "name": "report⁦.txt",
+      "expected_code": "FILENAME_BIDI_CONTROL"
+    },
+    {
+      "name": "report.pdf.exe. ",
+      "expected_code": "FILENAME_TRAILING_DOT_SPACE"
+    },
+    {
+      "name": "report.pdf. exe",
+      "expected_code": "FILENAME_EXTENSION_WHITESPACE"
+    },
+    {
+      "name": "report.pdf.exe:stream",
+      "expected_code": "FILENAME_ADS_LIKE"
+    },
+    {
+      "name": "report.txt:payload.ps1",
+      "expected_code": "FILENAME_ADS_LIKE"
+    },
+    {
+      "name": ".exe",
+      "expected_code": "FILENAME_HIDDEN_ACTIVE"
+    },
+    {
+      "name": "invoice.pdf.e\nxe",
+      "expected_code": "FILENAME_UNSAFE_CONTROL"
+    },
+    {
+      "name": "invoice.pdf.­exe",
+      "expected_code": "FILENAME_INVISIBLE_FORMAT"
+    },
+    {
+      "name": "invoice.pdf.․exe",
+      "expected_code": "DOUBLE_EXTENSION"
+    },
+    {
+      "name": "invoice.pdf.ｅｘｅ",
+      "expected_code": "DOUBLE_EXTENSION"
+    }
+  ],
+  "benign": [
+    "café.pdf",
+    "写真.jpg",
+    "resumen.final.pdf",
+    "backup.tar.gz",
+    "normal.exe",
+    "script.ps1",
+    "README.md",
+    "app.v2.exe",
+    "program.1.0.exe",
+    "tool.release.dll",
+    "base.de.datos.csv",
+    "budget.2026.xlsx",
+    "invoice.pdf",
+    "notes.txt",
+    "index.html",
+    "test_data.json",
+    "report-2026.csv",
+    "documento.último.docx",
+    "日本語.txt",
+    "teoría.a.pdf",
+    "video.sample.mp4",
+    "program_v2.exe",
+    "package-lock.json",
+    "my.tool.v2.bat",
+    "style.min.js",
+    "chart.preview.svg",
+    "report.2024.11.pdf",
+    "analyse.R",
+    "guide.pdf.日本語",
+    "note​.txt",
+    "summary。txt",
+    "timestamp:notes.txt",
+    "notes:\t.txt",
+    "hello\t.txt"
+  ],
+  "review": [
+    {
+      "name": "invoice.pdf.ɇxe",
+      "expected_code": "FILENAME_MIXED_UNICODE_EXTENSION"
+    },
+    {
+      "name": "invoice.pdf.éxé",
+      "expected_code": "FILENAME_MIXED_UNICODE_EXTENSION"
+    },
+    {
+      "name": "notes.exe          .pdf",
+      "expected_code": "FILENAME_WHITESPACE_GAP"
+    }
+  ]
+}

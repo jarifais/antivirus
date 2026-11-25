@@ -54,3 +54,18 @@ Referencia: issue #6 y hoja de ruta #9 del repositorio.
 Se incluyen tests negativos y positivos con nombres sintéticos; estos
 casos **no miden** falsos positivos en datos de usuario ni sustituyen la
 validación de comportamiento de Win32/NTFS.
+
+## Corpus sintético de nombres (regresión, NO benchmark real)
+
+Se añade `tests/data/filename_cases.json`, con 30
+nombres engañosos sintéticos, 34 nombres de referencia
+benignos y 3 nombres para revisión no bloqueante. Todos son
+**cadenas de texto inofensivas**, sin muestras de software o malware.
+
+El test exige bloqueo para los ejemplos engañosos, puntuación inferior
+al umbral de revisión para los benignos y revisión no bloqueante para
+los ambiguos. Estas cifras demuestran **consistencia sobre fixtures
+diseñados**; no son tasas de precisión, de falsos positivos ni de
+detección de malware en producción. Todavía faltan datos reales
+independientes con permisos adecuados y un análisis de diferencias
+de Windows/NTFS.

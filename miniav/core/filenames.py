@@ -64,9 +64,7 @@ def inspect_filename(filename: str) -> FilenameInspection:
     active = len(tokens) > 1 and tokens[-1] in _ACTIVE
     decoy = len(tokens) > 2 and tokens[-2] in _DECOY
     # Empty or intervening suffix tokens can hide the document extension.
-    decoy_before_suffix = any(
-        part in _DECOY for part in tokens[max(0, len(tokens) - 5):-1]
-    )
+    decoy_before_suffix = any(part in _DECOY for part in tokens[:-1])
     intervening_decoy = active and not decoy and decoy_before_suffix
     mixed_unicode_suffix = (
         len(tokens) > 2 and not active and
