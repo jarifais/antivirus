@@ -27,9 +27,9 @@ class ScannerTests(unittest.TestCase):
         self.assertEqual(policy.action, "QUARANTINED")
         self.assertTrue(any(f.blocking for f in result.findings))
 
-    def test_ordinary_executable_is_quarantined(self):
+    def test_malformed_executable_is_error(self):
         _, policy = self.scan("setup.exe", b"MZ" + b"\0" * 120)
-        self.assertEqual(policy.action, "QUARANTINED")
+        self.assertEqual(policy.action, "ERROR")
 
     def test_corrupt_zip_is_error(self):
         _, policy = self.scan("broken.zip", b"not actually a zip")

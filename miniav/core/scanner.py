@@ -13,7 +13,8 @@ from pathlib import Path
 
 from miniav import __version__, POLICY_VERSION
 from .archives import inspect_zip
-from .filetypes import ACTIVE_EXTENSIONS, DECOY_EXTENSIONS, SCRIPT_EXTENSIONS, detect_type
+from .pe import PEFormatError, inspect_pe
+from .filetypes import ACTIVE_EXTENSIONS, DECOY_EXTENSIONS, EXECUTABLE_EXTENSIONS, SCRIPT_EXTENSIONS, detect_type
 from .models import Finding, ScanResult
 from .policy import verdict
 from .yara_engine import rules_version, scan_yara, yara_capability
@@ -48,6 +49,8 @@ def scan_file(path: Path | str, config: dict | None = None,
     suffix = p.suffix.lower()
     detected = "Unknown/binary"
     yara_matches: list[str] = []
+    pe_details = None
+    trusted_pe = False
     complete = True
     start = time.monotonic()
     yara_ok, yara_reason = yara_capability()
@@ -78,12 +81,61 @@ def scan_file(path: Path | str, config: dict | None = None,
         detected = detect_type(raw, p)
         parts = p.name.lower().split(".")
         ext = parts[-1] if len(parts) > 1 else ""
-        is_active = ext in ACTIVE_EXTENSIONS or suffix in SCRIPT_EXTENSIONS
+        is_active = ext in ACTIVE_EXTENSIONS or suffix in SCRIPT_EXTENSIONS or suffix in EXECUTABLE_EXTENSIONS
         if len(parts) > 2 and parts[-2] in DECOY_EXTENSIONS and ext in ACTIVE_EXTENSIONS:
             findings.append(Finding("DOUBLE_EXTENSION", "high", 90,
                                     "Doble extensión para disimular un ejecutable", "filenames",
                                     p.name, True))
-        if is_active:
+        if detected == "PE/Windows executable":
+            try:
+                pe = inspect_pe(p)
+                imported = {entry.rsplit("!", 1)[-1].lower() for entry in pe.imports}
+                suspicious_apis = sorted(imported.intersection({
+                    "virtualallocex", "writeprocessmemory",
+                    "createremotethread", "ntmapviewofsection",
+                }))
+                rwx_sections = [s["name"] for s in pe.sections
+                                if s["writable"] and s["executable"]]
+                pe_details = {
+                    "bits": pe.bits, "machine": pe.machine,
+                    "sections": len(pe.sections),
+                    "rwx_sections": rwx_sections,
+                    "import_count": len(pe.imports),
+                    "suspicious_imports": suspicious_apis,
+                    "signature_present_unverified": pe.signature_present,
+                    "overlay_bytes": pe.overlay_bytes,
+                }
+                if rwx_sections:
+                    findings.append(Finding(
+                        "PE_RWX_SECTION", "high", 85,
+                        "Sección PE ejecutable y escribible", "pe",
+                        location=",".join(rwx_sections), blocking=True))
+                if len(suspicious_apis) >= 2:
+                    findings.append(Finding(
+                        "PE_INJECTION_APIS", "high", 70,
+                        "Combinación de imports relacionada con inyección",
+                        "pe", blocking=True, metadata={"imports": suspicious_apis}))
+                if pe.overlay_bytes > 65536 and pe.overlay_bytes > size * 0.25 and not pe.signature_present:
+                    findings.append(Finding(
+                        "PE_LARGE_OVERLAY", "medium", 20,
+                        "Overlay de tamaño relevante", "pe"))
+                approved = cfg.get("trusted_executable_sha256", [])
+                if not isinstance(approved, list) or any(
+                    not isinstance(value, str) or len(value) != 64 or
+                    any(ch not in "0123456789abcdefABCDEF" for ch in value)
+                    for value in approved
+                ):
+                    raise ValueError("trusted_executable_sha256 debe contener hashes SHA-256")
+                trusted_pe = sha256.hexdigest() in {value.lower() for value in approved}
+                if not trusted_pe:
+                    findings.append(Finding(
+                        "PE_REVIEW_REQUIRED", "info", 20,
+                        "Ejecutable PE desconocido: revisión, no implica malware", "pe"))
+            except PEFormatError as exc:
+                errors.append(f"PE malformado: {exc}")
+        elif suffix in EXECUTABLE_EXTENSIONS:
+            errors.append("Extensión ejecutable sin formato PE reconocido")
+        if is_active and detected != "PE/Windows executable":
             findings.append(Finding("ACTIVE_FILE", "medium", 50,
                                     "Tipo activo: revisión antes de liberar", "filetypes"))
         if detected in {"PE/Windows executable", "ELF executable/object", "Mach-O executable/object"}:
@@ -120,6 +172,10 @@ def scan_file(path: Path | str, config: dict | None = None,
             for match in yara_matches:
                 findings.append(Finding("YARA_MATCH", "high", 80,
                                         f"Coincidencia YARA: {match}", "yara", blocking=True))
+        final_stat = p.stat()
+        if (before.st_size, before.st_mtime_ns, before.st_ino) != (
+            final_stat.st_size, final_stat.st_mtime_ns, final_stat.st_ino):
+            errors.append("Archivo cambiado durante el análisis estructural")
     except Exception as exc:
         errors.append(f"{type(exc).__name__}: {exc}")
     if errors:
@@ -139,6 +195,7 @@ def scan_file(path: Path | str, config: dict | None = None,
             "yara": yara_ok, "yara_detail": yara_reason,
             "zip": True, "rar": False, "7z": False, "deep_pe": False,
             "ml": False, "reconstructed": True,
+            "pe": pe_details, "trusted_sha256": trusted_pe,
         }, engine_version=__version__, policy_version=POLICY_VERSION,
         rules_version=rules_ver, scanned_at=now,
         error="; ".join(errors) if errors else None)
