@@ -4,6 +4,13 @@ Proyecto de análisis estático de archivos para la carpeta **Incoming de eMule*
 
 **Estado de la migración:** preparación del repositorio GitHub. El código fuente histórico v0.3.0 se está importando por etapas; el árbol de `main` todavía no debe considerarse una distribución instalable.
 
+## Desarrollo y colaboración
+
+- [Hoja de ruta de los 16 puntos](ROADMAP.md) y [lista pública y actualizable en GitHub Issues](https://github.com/jarifais/antivirus/issues/9).
+- [Tareas accesibles para nuevos colaboradores](https://github.com/jarifais/antivirus/issues/7) y [cómo contribuir](CONTRIBUTING.md).
+- Estado: **bloque 1 (ejecutables y scripts) implementado provisionalmente**, pero pendiente validar sensibilidad y falsos positivos con corpus representativo. Siguiente punto: **bloque 2, dobles extensiones** ([issue #6](https://github.com/jarifais/antivirus/issues/6)).
+- El repositorio no tiene todavía licencia expresa; la decisión está pendiente en [#8](https://github.com/jarifais/antivirus/issues/8).
+
 ## Referencias del proyecto
 
 - Última versión funcional verificada fuera de GitHub: **MiniAntivirus v0.3.0**.
