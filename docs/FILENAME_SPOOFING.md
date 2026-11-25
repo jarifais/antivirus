@@ -37,3 +37,20 @@ no debe liberarse por aparecer su hash en una lista de aprobados.
   comprobaciones de firmas y parsers.
 
 Referencia: issue #6 y hoja de ruta #9 del repositorio.
+
+## Refuerzo del bloque 2 — variantes antes omitidas
+
+- Se inspeccionan extensiones documentales ocultas mediante **puntos
+  consecutivos o sufijos intermedios**, por ejemplo `invoice.pdf...exe`
+  y `invoice.pdf.v2.exe`. Un nombre normal como `app.v2.exe` no se bloquea.
+- Se registran **extensiones mezcladas con caracteres Unicode no reconocidos**
+  tras una extensión documental, sin asumir que sean ejecutables.
+- Se examinan **caracteres de control, espacios alrededor de extensiones
+  activas, nombres ocultos `.exe`** y el caso de un sufijo ejecutable
+  seguido de `:stream`, indicativo de sintaxis ADS.
+- Un nombre con `:` que no contiene extensión activa se registra como
+  observación de compatibilidad, sin bloqueo automático.
+
+Se incluyen tests negativos y positivos con nombres sintéticos; estos
+casos **no miden** falsos positivos en datos de usuario ni sustituyen la
+validación de comportamiento de Win32/NTFS.

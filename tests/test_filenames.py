@@ -89,6 +89,63 @@ class FilenameTests(unittest.TestCase):
             self.assertEqual(decide(result).action, "CLEAN")
             self.assertFalse(any(f.analyzer == "filenames" for f in result.findings))
 
+
+    def test_intervening_empty_dots_are_not_allowed(self):
+        self.assert_codes("invoice.pdf...exe", "DOUBLE_EXTENSION_OBSCURED")
+
+    def test_document_extension_hidden_by_version(self):
+        self.assert_codes("invoice.pdf.v2.exe", "DOUBLE_EXTENSION_OBSCURED")
+
+    def test_document_extension_hidden_by_space_segment(self):
+        self.assert_codes("receipt.docx. .cmd", "DOUBLE_EXTENSION_OBSCURED")
+
+    def test_ads_after_active_extension(self):
+        self.assert_codes("report.pdf.exe:payload", "FILENAME_ADS_LIKE")
+
+    def test_ads_with_a_legitimate_colon_not_auto_blocked(self):
+        result = inspect_filename("appointment:notes.txt")
+        self.assertTrue(any(f.code == "FILENAME_ADS_LIKE" for f in result.findings))
+        self.assertFalse(any(f.blocking for f in result.findings))
+
+    def test_hidden_active_extension(self):
+        self.assert_codes(".exe", "FILENAME_HIDDEN_ACTIVE")
+
+    def test_control_in_active_extension(self):
+        self.assert_codes("invoice.pdf.e\nxe", "FILENAME_UNSAFE_CONTROL")
+
+    def test_whitespace_before_active_extension(self):
+        self.assert_codes("program. exe", "FILENAME_EXTENSION_WHITESPACE")
+
+    def test_unrecognized_mixed_unicode_extension_is_review(self):
+        result = inspect_filename("invoice.pdf.\u0247xe")
+        self.assertIn("FILENAME_MIXED_UNICODE_EXTENSION",
+                      {f.code for f in result.findings})
+        self.assertFalse(any(f.blocking for f in result.findings))
+
+    def test_unicode_only_extension_is_not_called_executable(self):
+        result = inspect_filename("invoice.pdf.日本語")
+        self.assertFalse(any(f.code == "FILENAME_CONFUSABLE_EXTENSION"
+                             for f in result.findings))
+        self.assertFalse(any(f.code == "FILENAME_MIXED_UNICODE_EXTENSION"
+                             for f in result.findings))
+
+    def test_neutral_colon_and_controls_are_review_only(self):
+        result = inspect_filename("notes:\t.txt")
+        self.assertTrue(result.findings)
+        self.assertFalse(any(f.blocking for f in result.findings))
+
+    def test_document_chain_with_approved_binary_still_quarantined(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            path = root / "guide.pdf.version.exe"
+            data = make_pe()
+            path.write_bytes(data)
+            result = scan_file(path, {
+                "trusted_executable_sha256": [hashlib.sha256(data).hexdigest()]
+            }, rules_dir=root / "no-yara")
+            self.assertEqual(decide(result).action, "QUARANTINED")
+            self.assertTrue(any(f.code == "DOUBLE_EXTENSION_OBSCURED" for f in result.findings))
+
     def test_trusted_script_hash_cannot_override_double_extension(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

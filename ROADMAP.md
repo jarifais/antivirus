@@ -9,8 +9,8 @@
 **Ejecutables y scripts (1–5)**
 
 1. **Ejecutables y scripts activos.** Implementación inicial realizada, **cerrado provisionalmente**. Validación de precisión pendiente: [#4](https://github.com/jarifais/antivirus/issues/4).
-2. **Dobles extensiones engañosas.** Implementación inicial integrada y probada en Linux/Windows (**cierre funcional provisional**); pendiente corpus de falsos positivos y cobertura Unicode [#6](https://github.com/jarifais/antivirus/issues/6), PR #10.
-3. **Discrepancias entre extensión y formato ejecutable real.** **Próximo punto:** ampliar análisis y pruebas para formatos ejecutables ocultos bajo extensiones inocuas [#11](https://github.com/jarifais/antivirus/issues/11).
+2. **Dobles extensiones engañosas.** Endurecimiento en curso (puntos Unicode, sufijos intermedios, ADS, controles); el punto **permanece abierto** por falta de corpus benigno/engañoso y validación nativa completa de Windows [#6](https://github.com/jarifais/antivirus/issues/6), PR #10.
+3. **Discrepancias entre extensión y formato ejecutable real.** **En espera** hasta cerrar o aprobar expresamente el bloque 2; plan de trabajo [#11](https://github.com/jarifais/antivirus/issues/11).
 4. **Entropía elevada en ejecutables.** Heurística preliminar; pendiente calibración y falsos positivos.
 5. **PowerShell codificado.** Heurísticas y catálogo parcial; pendiente evaluación de variantes.
 
@@ -39,7 +39,7 @@
 ## Para participar
 
 - [#7 — Tests benignos/sintéticos y documentación](https://github.com/jarifais/antivirus/issues/7).
-- [#11 — Extensión no acorde al contenido activo, siguiente punto](https://github.com/jarifais/antivirus/issues/11).
+- [#6 — Dobles extensiones, punto actual](https://github.com/jarifais/antivirus/issues/6).
 - [#8 — Aviso propietario publicado; revisión jurídica del acuerdo de contribución pendiente](https://github.com/jarifais/antivirus/issues/8).
 - [LICENSE](LICENSE), [CONTRIBUTING.md](CONTRIBUTING.md), [plantilla de cesión](CONTRIBUTOR_AGREEMENT_TEMPLATE.md) y [SECURITY.md](SECURITY.md).
 
